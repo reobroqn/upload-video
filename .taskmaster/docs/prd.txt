@@ -1,0 +1,170 @@
+<context>
+# Overview  
+VideoFlow is a modern web application that enables users to upload, manage, and stream video content with ease. Built with FastAPI and Svelte, it provides a seamless experience for content creators and viewers alike. The platform handles video storage using S3 and supports smooth playback across devices.
+
+# Core Features  
+- **Video Upload**
+  - Drag-and-drop interface for easy uploads
+  - Support for MP4, WebM, and MOV formats (up to 2GB)
+  - Real-time upload progress and status updates
+  - Background processing for video optimization
+
+- **Video Playback**
+  - Adaptive streaming for various network conditions
+  - Responsive HTML5 video player with standard controls
+  - Support for multiple video qualities (when available)
+  - Keyboard shortcuts for playback control
+
+- **User Management**
+  - Email/password authentication with JWT
+  - User profiles with avatar support
+  - Video organization with tags and categories
+  - Private/public video sharing options
+
+# User Experience  
+- **User Personas**
+  1. Content Creators: Need to upload, organize, and share video content
+  2. Viewers: Want to discover and watch videos with minimal friction
+
+- **Key User Flows**
+  1. Sign up → Upload video → Add metadata → Share
+  2. Browse videos → Watch → Like/comment → Save to playlist
+
+- **UI/UX Principles**
+  - Clean, minimalist interface
+  - Mobile-first responsive design
+  - Intuitive navigation
+  - Clear feedback for user actions
+</context>
+
+<PRD>
+# Technical Architecture  
+## System Components
+- **Frontend (Svelte)**
+  - Single Page Application (SPA)
+  - State management with Svelte stores
+  - Responsive UI with Tailwind CSS
+  - Video.js for enhanced playback capabilities
+
+- **Backend (FastAPI)**
+  - RESTful API endpoints
+  - JWT authentication
+  - File handling and streaming
+  - Background task processing
+
+- **Storage & Infrastructure**
+  - AWS S3 for video storage
+  - CloudFront CDN for content delivery
+  - PostgreSQL for metadata
+  - Redis for caching and background jobs
+
+## Data Models
+```typescript
+// User
+interface User {
+  id: string;
+  email: string;
+  hashed_password: string;
+  display_name: string;
+  avatar_url?: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// Video
+interface Video {
+  id: string;
+  user_id: string;
+  title: string;
+  description?: string;
+  file_key: string;
+  file_size: number;
+  duration: number;
+  mime_type: string;
+  status: 'processing' | 'ready' | 'failed';
+  is_public: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+```
+
+# Development Roadmap  
+## MVP (Phase 1)
+1. **Core Infrastructure**
+   - Set up FastAPI backend with basic routing
+   - Configure Svelte frontend with Vite
+   - Implement basic CI/CD pipeline
+
+2. **Authentication**
+   - User registration and login
+   - JWT token management
+   - Protected routes
+
+3. **Video Handling**
+   - File upload to S3 with presigned URLs
+   - Basic video metadata storage
+   - Simple video player
+
+## Phase 2 (Post-MVP)
+- User profiles and video management
+- Video transcoding for multiple qualities
+- Search and filtering
+- Basic analytics
+
+## Phase 3 (Enhancements)
+- Playlists and collections
+- User interactions (likes, comments)
+- Advanced video processing (thumbnails, previews)
+- Admin dashboard
+
+# Logical Dependency Chain
+1. **Foundation**
+   - Backend API structure
+   - Authentication system
+   - Basic frontend layout
+
+2. **Core Functionality**
+   - Video upload flow
+   - Video storage and retrieval
+   - Basic playback functionality
+
+3. **Enhanced Experience**
+   - User profiles
+   - Video organization
+   - Performance optimizations
+
+# Risks and Mitigations  
+- **Large File Handling**
+  - Implement chunked uploads
+  - Set file size limits
+  - Use background processing
+
+- **Performance**
+  - Implement CDN for video delivery
+  - Use efficient video formats
+  - Add caching layers
+
+- **Security**
+  - Input validation
+  - Rate limiting
+  - Secure file handling
+  - Regular security audits
+
+# Appendix  
+## Technical Specifications
+- Video Codecs: H.264, VP9
+- Container Formats: MP4, WebM
+- Maximum File Size: 2GB
+- Supported Browsers: Latest versions of Chrome, Firefox, Safari, Edge
+
+## Environment Variables
+```
+# Backend
+DATABASE_URL=postgresql://user:password@localhost:5432/videodb
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_REGION=us-east-1
+S3_BUCKET_NAME=your-bucket-name
+JWT_SECRET=your_jwt_secret
+```
+</PRD>

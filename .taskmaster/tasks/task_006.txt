@@ -1,0 +1,15 @@
+# Task ID: 6
+# Title: Background Video Processing
+# Status: pending
+# Dependencies: 1, 4
+# Priority: medium
+# Description: Implement background processing for video optimization using Redis and background tasks.
+# Details:
+1. Set up Redis for background job queue.
+2. Create a background task in FastAPI to process videos (e.g., transcoding).
+3. Trigger the background task after a successful upload.
+4. Update the video status in the database.
+
+# Test Strategy:
+1. Upload a video and verify that the background task is triggered.
+2. Check the video status updates correctly in the database.

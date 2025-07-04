@@ -1,0 +1,15 @@
+# Task ID: 5
+# Title: Basic Video Playback
+# Status: pending
+# Dependencies: 2, 4
+# Priority: high
+# Description: Create a basic video player component in Svelte and implement video playback.
+# Details:
+1. Integrate Video.js into the Svelte frontend.
+2. Fetch video metadata from the backend.
+3. Implement the video player with standard controls.
+4. Display the video based on the file key from S3.
+
+# Test Strategy:
+1. Verify that the video player loads and plays videos correctly.
+2. Test the video player controls (play, pause, volume, etc.).

@@ -1,0 +1,17 @@
+# Task ID: 3
+# Title: User Authentication with JWT
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Implement user registration and login functionality using JWT for authentication.
+# Details:
+1. Create user registration endpoint in FastAPI: hash passwords using passlib, store user data in PostgreSQL.
+2. Create login endpoint: verify credentials, generate JWT using python-jose.
+3. Implement JWT authentication middleware to protect routes.
+4. Define User data model in FastAPI using Pydantic.
+
+# Test Strategy:
+1. Test user registration with valid and invalid data.
+2. Test login with correct and incorrect credentials.
+3. Verify JWT tokens are generated and validated correctly.
+4. Test protected routes with and without valid JWT.

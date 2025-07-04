@@ -1,0 +1,27 @@
+{
+  "name": "videoflow-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "svelte": "^4.2.8",
+    "svelte-check": "^3.6.4",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.4.19"
+  },
+  "dependencies": {
+    "@sveltejs/kit": "^2.0.0",
+    "@tailwindcss/forms": "^0.5.7"
+  }
+}

@@ -1,0 +1,93 @@
+{
+	"meta": {
+		"generatedAt": "2025-07-04T03:53:10.866Z",
+		"tasksAnalyzed": 10,
+		"totalTasks": 10,
+		"analysisCount": 10,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": false
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Backend Setup and Basic Routing",
+			"complexityScore": 4,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down the 'Configure environment variables' step into subtasks: setting up .env file, loading variables in FastAPI, and validating the loaded variables.",
+			"reasoning": "This task involves setting up a new project and installing dependencies, which is relatively straightforward. However, configuring environment variables can be tricky and warrants breaking down."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Frontend Setup with Svelte and Tailwind CSS",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the 'Create a basic layout' step into subtasks: setting up the navigation bar, creating a main content area, adding a footer, and implementing basic styling.",
+			"reasoning": "Setting up a frontend with a framework and styling library involves multiple steps. Creating a basic layout can be broken down further for clarity."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "User Authentication with JWT",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break down the 'Implement JWT authentication middleware' step into subtasks: creating a middleware function, verifying the JWT, handling invalid tokens, and attaching user data to the request.",
+			"reasoning": "Implementing user authentication with JWT involves several complex steps, including hashing passwords, generating and validating tokens, and protecting routes."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Video Upload to S3",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the 'Handle file size limits and supported formats' step into subtasks: implementing file size validation, validating supported file formats, returning appropriate error messages, and testing the validation logic.",
+			"reasoning": "This task involves interacting with AWS S3, which can be complex. Handling file uploads, including size limits and format validation, requires careful implementation."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Basic Video Playback",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down the 'Implement the video player with standard controls' step into subtasks: initializing the video player, adding play/pause controls, adding volume controls, and adding a progress bar.",
+			"reasoning": "Integrating a video player and implementing basic controls requires several steps to ensure proper functionality."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Background Video Processing",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the 'Create a background task in FastAPI to process videos' step into subtasks: defining the background task function, implementing video transcoding logic (placeholder), handling task errors, and logging task progress.",
+			"reasoning": "Implementing background processing with Redis and task queues adds complexity. The video processing logic itself can be quite involved."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "User Profile Management",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down the 'Implement avatar upload and storage' step into subtasks: creating an endpoint for avatar upload, generating presigned URLs for S3, uploading the avatar to S3, and updating the user profile with the avatar URL.",
+			"reasoning": "This task involves file uploads and database updates, which can be broken down into smaller, more manageable steps."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Video Organization with Tags and Categories",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the 'Create endpoints to manage video tags and categories' step into subtasks: creating endpoints for adding tags, creating endpoints for removing tags, creating endpoints for adding categories, and creating endpoints for removing categories.",
+			"reasoning": "Managing video tags and categories involves creating and managing database entries, which can be broken down into smaller steps."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Adaptive Streaming Implementation",
+			"complexityScore": 8,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the 'Generate multiple video qualities during background processing' step into subtasks: selecting video resolutions, using a video encoding library, generating different video qualities, creating an HLS manifest, and storing the manifest and video segments.",
+			"reasoning": "Adaptive streaming is a complex topic, and implementing it requires multiple steps, including video encoding and manifest generation."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Responsive Design Implementation",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down the 'Utilize Tailwind CSS's responsive utility classes' step into subtasks: applying responsive classes to the navigation bar, applying responsive classes to the video player, applying responsive classes to the content area, and testing the responsiveness on different devices.",
+			"reasoning": "Implementing responsive design requires applying responsive classes to various UI elements and testing across different devices."
+		}
+	]
+}

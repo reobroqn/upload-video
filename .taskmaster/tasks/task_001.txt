@@ -1,0 +1,15 @@
+# Task ID: 1
+# Title: Backend Setup and Basic Routing
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Set up the FastAPI backend project with basic routing and necessary dependencies.
+# Details:
+1. Initialize a new FastAPI project.
+2. Install required packages: fastapi, uvicorn, python-multipart, boto3, psycopg2-binary, python-dotenv, passlib, python-jose.
+3. Create basic routes (e.g., /health, /) to verify the server is running.
+4. Configure environment variables using python-dotenv for database connection, AWS credentials, and JWT secret.
+
+# Test Strategy:
+1. Run the FastAPI server and verify the basic routes using a web browser or curl.
+2. Check environment variables are loaded correctly.

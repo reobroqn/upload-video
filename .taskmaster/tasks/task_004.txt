@@ -1,0 +1,16 @@
+# Task ID: 4
+# Title: Video Upload to S3
+# Status: pending
+# Dependencies: 1, 3
+# Priority: high
+# Description: Implement file upload functionality to AWS S3 using presigned URLs.
+# Details:
+1. Create an endpoint in FastAPI to generate presigned URLs for S3 uploads.
+2. Implement the S3 upload logic using boto3.
+3. Handle file size limits (2GB) and supported formats (MP4, WebM, MOV).
+4. Store video metadata (title, description, file_key, file_size, mime_type) in PostgreSQL.
+
+# Test Strategy:
+1. Test file uploads with different file sizes and formats.
+2. Verify that the metadata is stored correctly in the database.
+3. Check for correct handling of file size limits.
