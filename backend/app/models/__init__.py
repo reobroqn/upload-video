@@ -1,4 +1,7 @@
-# Import all models here so they're registered with SQLAlchemy
-from .user import User  # noqa
+# Import all models here so they're properly registered with SQLAlchemy
+from .user import User
 
-__all__ = ['User']
+# Make models available for direct import from app.models
+__all__ = [
+    "User",
+]

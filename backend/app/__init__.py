@@ -1,1 +1,5 @@
-# This file makes the app directory a Python package
+"""
+VideoFlow Backend Application Package.
+
+This package contains the main FastAPI application and its components.
+"""
