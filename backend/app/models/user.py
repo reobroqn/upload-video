@@ -44,6 +44,7 @@ class User(Base):
     is_superuser = Column(
         Boolean, default=False, doc="Whether the user has superuser privileges"
     )
+    avatar_url = Column(String, nullable=True, doc="URL to user's avatar image")
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -81,6 +82,7 @@ class User(Base):
             "full_name": self.full_name,
             "is_active": self.is_active,
             "is_superuser": self.is_superuser,
+            "avatar_url": self.avatar_url,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }

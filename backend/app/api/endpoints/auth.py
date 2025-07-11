@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app.api.v1.deps.deps import get_current_active_user
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.security import create_access_token, get_password_hash, verify_password
@@ -111,23 +110,3 @@ async def login(
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-@router.get("/me", response_model=UserInDB)
-async def read_users_me(
-    current_user: User = Depends(get_current_active_user),
-) -> UserInDB:
-    """
-    Get the current authenticated user's profile.
-
-    This endpoint returns the profile information of the currently authenticated
-    user. The user must provide a valid JWT token in the Authorization header.
-
-    Args:
-        current_user: The currently authenticated user (from JWT token)
-
-    Returns:
-        UserInDB: The user's profile information
-
-    """
-    return current_user

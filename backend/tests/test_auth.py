@@ -173,3 +173,26 @@ def test_protected_route_unauthorized(client: TestClient) -> None:
     response_data = response.json()
     assert "detail" in response_data
     assert "Not authenticated" in response_data["detail"]
+
+
+def test_protected_route_invalid_token(client: TestClient) -> None:
+    """
+    Test accessing a protected route with an invalid token.
+
+    Args:
+        client: Test client for making HTTP requests
+
+    """
+    # Arrange - Use an invalid token
+    invalid_token = "this-is-not-a-valid-jwt"
+
+    # Act - Access protected route with the invalid token
+    response = client.get(
+        "/api/v1/users/me", headers={"Authorization": f"Bearer {invalid_token}"}
+    )
+
+    # Assert
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    response_data = response.json()
+    assert "detail" in response_data
+    assert "Could not validate credentials" in response_data["detail"]
