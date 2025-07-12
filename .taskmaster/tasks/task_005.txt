@@ -8,7 +8,7 @@
 1. Integrate Video.js into the Svelte frontend.
 2. Fetch video metadata from the backend.
 3. Implement the video player with standard controls.
-4. Display the video based on the file key from S3.
+4. Display the video based on the file key from MinIO.
 
 # Test Strategy:
 1. Verify that the video player loads and plays videos correctly.

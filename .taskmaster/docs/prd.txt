@@ -1,6 +1,6 @@
 <context>
 # Overview  
-VideoFlow is a modern web application that enables users to upload, manage, and stream video content with ease. Built with FastAPI and Svelte, it provides a seamless experience for content creators and viewers alike. The platform handles video storage using S3 and supports smooth playback across devices.
+VideoFlow is a modern web application that enables users to upload, manage, and stream video content with ease. Built with FastAPI and Svelte, it provides a seamless experience for content creators and viewers alike. The platform handles video storage using MinIO and supports smooth playback across devices.
 
 # Core Features  
 - **Video Upload**
@@ -53,7 +53,7 @@ VideoFlow is a modern web application that enables users to upload, manage, and 
   - Background task processing
 
 - **Storage & Infrastructure**
-  - AWS S3 for video storage
+  - MinIO for video storage
   - CloudFront CDN for content delivery
   - PostgreSQL for metadata
   - Redis for caching and background jobs
@@ -101,7 +101,7 @@ interface Video {
    - Protected routes
 
 3. **Video Handling**
-   - File upload to S3 with presigned URLs
+   - File upload to MinIO with presigned URLs
    - Basic video metadata storage
    - Simple video player
 
@@ -161,10 +161,10 @@ interface Video {
 ```
 # Backend
 DATABASE_URL=postgresql://user:password@localhost:5432/videodb
-AWS_ACCESS_KEY_ID=your_access_key
-AWS_SECRET_ACCESS_KEY=your_secret_key
-AWS_REGION=us-east-1
-S3_BUCKET_NAME=your-bucket-name
+MINIO_ENDPOINT=http://localhost:9000
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+MINIO_BUCKET_NAME=videoflow
 JWT_SECRET=your_jwt_secret
 ```
 </PRD>

@@ -62,7 +62,9 @@ class UserUpdate(BaseModel):
         description="New username (3-50 characters, optional)",
     )
     full_name: str | None = Field(None, description="New full name (optional)")
-    avatar_url: str | None = Field(None, description="URL to user's avatar image (optional)")
+    avatar_url: str | None = Field(
+        None, description="URL to user's avatar image (optional)"
+    )
     password: str | None = Field(
         None, min_length=8, description="New password (minimum 8 characters, optional)"
     )

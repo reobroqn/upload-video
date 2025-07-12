@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 1, 4
 # Priority: medium
-# Description: Implement background processing for video optimization using Redis and background tasks.
+# Description: Implement background processing for video optimization using Redis and background tasks, compatible with MinIO storage.
 # Details:
 1. Set up Redis for background job queue.
 2. Create a background task in FastAPI to process videos (e.g., transcoding).

@@ -40,9 +40,9 @@
       },
       {
         "id": 4,
-        "title": "Video Upload to S3",
-        "description": "Implement file upload functionality to AWS S3 using presigned URLs.",
-        "details": "1. Create an endpoint in FastAPI to generate presigned URLs for S3 uploads.\n2. Implement the S3 upload logic using boto3.\n3. Handle file size limits (2GB) and supported formats (MP4, WebM, MOV).\n4. Store video metadata (title, description, file_key, file_size, mime_type) in PostgreSQL.",
+        "title": "Video Upload to MinIO",
+        "description": "Implement file upload functionality to MinIO using presigned URLs.",
+        "details": "1. Create an endpoint in FastAPI to generate presigned URLs for MinIO uploads.\n2. Implement the MinIO upload logic.\n3. Handle file size limits (2GB) and supported formats (MP4, WebM, MOV).\n4. Store video metadata (title, description, file_key, file_size, mime_type) in PostgreSQL.",
         "testStrategy": "1. Test file uploads with different file sizes and formats.\n2. Verify that the metadata is stored correctly in the database.\n3. Check for correct handling of file size limits.",
         "priority": "high",
         "dependencies": [
@@ -56,8 +56,12 @@
         "id": 5,
         "title": "Basic Video Playback",
         "description": "Create a basic video player component in Svelte and implement video playback.",
-        "details": "1. Integrate Video.js into the Svelte frontend.\n2. Fetch video metadata from the backend.\n3. Implement the video player with standard controls.\n4. Display the video based on the file key from S3.",
-        "testStrategy": "1. Verify that the video player loads and plays videos correctly.\n2. Test the video player controls (play, pause, volume, etc.).",
+        "details": "1. Integrate Video.js into the Svelte frontend.
+2. Fetch video metadata from the backend.
+3. Implement the video player with standard controls.
+4. Display the video based on the file key from MinIO.",
+        "testStrategy": "1. Verify that the video player loads and plays videos correctly.
+2. Test the video player controls (play, pause, volume, etc.).",
         "priority": "high",
         "dependencies": [
           2,
@@ -69,9 +73,13 @@
       {
         "id": 6,
         "title": "Background Video Processing",
-        "description": "Implement background processing for video optimization using Redis and background tasks.",
-        "details": "1. Set up Redis for background job queue.\n2. Create a background task in FastAPI to process videos (e.g., transcoding).\n3. Trigger the background task after a successful upload.\n4. Update the video status in the database.",
-        "testStrategy": "1. Upload a video and verify that the background task is triggered.\n2. Check the video status updates correctly in the database.",
+        "description": "Implement background processing for video optimization using Redis and background tasks, compatible with MinIO storage.",
+        "details": "1. Set up Redis for background job queue.
+2. Create a background task in FastAPI to process videos (e.g., transcoding).
+3. Trigger the background task after a successful upload.
+4. Update the video status in the database.",
+        "testStrategy": "1. Upload a video and verify that the background task is triggered.
+2. Check the video status updates correctly in the database.",
         "priority": "medium",
         "dependencies": [
           1,
@@ -138,7 +146,7 @@
     ],
     "metadata": {
       "created": "2025-07-04T03:32:44.398Z",
-      "updated": "2025-07-11T15:51:43.000Z",
+      "updated": "2025-07-14T02:53:56.477Z",
       "description": "Tasks for master context"
     }
   }

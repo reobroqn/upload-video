@@ -45,7 +45,7 @@ def get_current_user(
         payload = decode_token(token)
         if not payload:
             raise credentials_exception
-        username: str = payload.get("sub")
+        username: str | None = payload.get("sub")
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)

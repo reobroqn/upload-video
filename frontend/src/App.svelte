@@ -1,10 +1,12 @@
 <script>
   import Layout from './lib/components/Layout.svelte';
   import UserProfileForm from './lib/components/UserProfileForm.svelte';
+  import VideoUploadForm from './lib/components/VideoUploadForm.svelte';
   import './app.css';
   
   let currentPage = 'home';
   let showProfileForm = false;
+  let showUploadForm = false; // New state for upload form visibility
   let user = {};
 
   const pages = {
@@ -16,7 +18,6 @@
 
   async function fetchUserProfile() {
     try {
-      // Replace with your actual API endpoint and authentication logic
       const response = await fetch('http://localhost:8000/api/v1/users/me', {
         headers: {
           'Authorization': `Bearer YOUR_JWT_TOKEN` // Replace with actual token
@@ -57,6 +58,76 @@
     }
   }
 
+  async function handleUploadVideo(event) {
+    const { title, description, file } = event.detail;
+
+    try {
+      // 1. Request presigned URL from backend
+      const requestBody = {
+        title: title,
+        description: description,
+        file_name: file.name,
+        file_size: file.size,
+        mime_type: file.type,
+      };
+
+      const presignedResponse = await fetch('http://localhost:8000/api/v1/videos/upload-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer YOUR_JWT_TOKEN` // Replace with actual token
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!presignedResponse.ok) {
+        const errorData = await presignedResponse.json();
+        throw new Error(errorData.detail || 'Failed to get presigned URL');
+      }
+
+      const { url, fields, video_id } = await presignedResponse.json();
+
+      // 2. Upload file directly to S3 using the presigned URL
+      const formData = new FormData();
+      for (const key in fields) {
+        formData.append(key, fields[key]);
+      }
+      formData.append('file', file); // The file must be the last field
+
+      const uploadResponse = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload file to S3');
+      }
+
+      // 3. Confirm upload completion with backend
+      const confirmResponse = await fetch('http://localhost:8000/api/v1/videos/upload-complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer YOUR_JWT_TOKEN` // Replace with actual token
+        },
+        body: JSON.stringify({ video_id: video_id }),
+      });
+
+      if (!confirmResponse.ok) {
+        const errorData = await confirmResponse.json();
+        throw new Error(errorData.detail || 'Failed to confirm upload completion');
+      }
+
+      alert('Video uploaded successfully!');
+      showUploadForm = false; // Hide form after successful upload
+      // Optionally, refresh video list or navigate
+
+    } catch (error) {
+      console.error('Error during video upload:', error);
+      alert(`Video upload failed: ${error.message}`);
+    }
+  }
+
   // Fetch user profile on component mount
   fetchUserProfile();
 </script>
@@ -70,12 +141,12 @@
       {pages[currentPage].content}
     </p>
     <div class="mt-8">
-      <a 
-        href="/upload" 
+      <button
+        on:click={() => showUploadForm = !showUploadForm}
         class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        Upload Video
-      </a>
+        {showUploadForm ? 'Hide Upload Form' : 'Upload Video'}
+      </button>
       <button
         on:click={() => showProfileForm = !showProfileForm}
         class="ml-4 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-blue-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -85,6 +156,13 @@
     </div>
   </div>
   
+  {#if showUploadForm}
+    <div class="bg-white shadow rounded-lg p-6 mt-8">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Upload New Video</h2>
+      <VideoUploadForm on:uploadVideo={handleUploadVideo} />
+    </div>
+  {/if}
+
   {#if showProfileForm}
     <div class="bg-white shadow rounded-lg p-6 mt-8">
       <h2 class="text-lg font-medium text-gray-900 mb-4">Edit User Profile</h2>

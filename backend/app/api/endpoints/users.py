@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.api.deps.deps import get_current_active_user
+from app.api.deps import get_current_active_user
 from app.core.database import get_db
 from app.models.user import User
 from app.schemas.user import UserInDB, UserUpdate
@@ -54,7 +54,9 @@ async def update_user_me(
 
     """
     if user_update.username and user_update.username != current_user.username:
-        existing_user = db.query(User).filter(User.username == user_update.username).first()
+        existing_user = (
+            db.query(User).filter(User.username == user_update.username).first()
+        )
         if existing_user and existing_user.id != current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

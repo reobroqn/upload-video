@@ -53,10 +53,10 @@ class Settings(BaseSettings):
     # AWS_SECRET_ACCESS_KEY: str
     # AWS_REGION: str
     # AWS_S3_BUCKET: str
-    AWS_ACCESS_KEY_ID: str
-    AWS_SECRET_ACCESS_KEY: str
-    AWS_REGION: str = "us-east-1"
-    S3_BUCKET_NAME: str
+    MINIO_ENDPOINT: str
+    MINIO_ACCESS_KEY: str
+    MINIO_SECRET_KEY: str
+    MINIO_BUCKET_NAME: str
 
     # CORS
     BACKEND_CORS_ORIGINS: list[str] = ["*"]

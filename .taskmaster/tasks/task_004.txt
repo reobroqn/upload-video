@@ -1,12 +1,12 @@
 # Task ID: 4
-# Title: Video Upload to S3
+# Title: Video Upload to MinIO
 # Status: pending
 # Dependencies: 1, 3
 # Priority: high
-# Description: Implement file upload functionality to AWS S3 using presigned URLs.
+# Description: Implement file upload functionality to MinIO using presigned URLs.
 # Details:
-1. Create an endpoint in FastAPI to generate presigned URLs for S3 uploads.
-2. Implement the S3 upload logic using boto3.
+1. Create an endpoint in FastAPI to generate presigned URLs for MinIO uploads.
+2. Implement the MinIO upload logic.
 3. Handle file size limits (2GB) and supported formats (MP4, WebM, MOV).
 4. Store video metadata (title, description, file_key, file_size, mime_type) in PostgreSQL.
 
