@@ -23,6 +23,7 @@ from app.core.database import Base
 # Import all models to ensure they are registered with SQLAlchemy's metadata
 # This is crucial for autogenerate to work properly
 from app.models import *  # noqa
+from app.core.config import get_settings
 
 # Set target_metadata to use the Base's metadata
 target_metadata = Base.metadata
@@ -46,7 +47,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_settings().database_url
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -66,8 +67,11 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    database_url = get_settings().database_url
+    configuration = config.get_section(config.config_ini_section, {})
+    configuration["sqlalchemy.url"] = database_url
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )

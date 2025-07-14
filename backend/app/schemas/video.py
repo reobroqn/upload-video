@@ -35,6 +35,7 @@ class VideoInDB(VideoBase):
     updated_at: datetime | None = Field(
         None, description="Timestamp when the video record was last updated"
     )
+    status: str = Field(..., description="Status of the video processing")
 
     class Config:
         from_attributes = True

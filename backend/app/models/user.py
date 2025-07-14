@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.core.database import Base
@@ -56,6 +57,7 @@ class User(Base):
         nullable=True,
         doc="Timestamp when the user was last updated",
     )
+    videos = relationship("Video", back_populates="owner", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         """

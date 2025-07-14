@@ -39,33 +39,37 @@ def test_register_user(client: TestClient) -> None:
 
 
 def test_register_duplicate_email(
-    client: TestClient, test_user: dict[str, Any]
+    client: TestClient, test_user_data: dict[str, Any]
 ) -> None:
     """
     Test registration with duplicate email.
 
     Args:
         client: Test client for making HTTP requests
-        test_user: Fixture providing a pre-existing test user
+        test_user_data: Fixture providing test user data
 
     """
-    # Arrange - Use same email as test_user but different username
-    user_data = {
-        "email": test_user["email"],  # Duplicate email
+    # Arrange - Register the first user
+    response = client.post("/api/v1/auth/register", json=test_user_data)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    # Arrange - Use same email as test_user_data but different username
+    duplicate_user_data = {
+        "email": test_user_data["email"],  # Duplicate email
         "username": "differentuser",
         "full_name": "Different User",
         "password": "TestPassword123!",
     }
 
     # Act
-    response = client.post("/api/v1/auth/register", json=user_data)
+    response = client.post("/api/v1/auth/register", json=duplicate_user_data)
 
     # Assert
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "Email already registered" in response.json()["detail"]
 
 
-def test_login_success(client: TestClient, test_user: dict[str, Any]) -> None:
+def test_login_success(client: TestClient, test_user_data: dict[str, Any]) -> None:
     """
     Test successful login with correct credentials.
 
@@ -75,7 +79,7 @@ def test_login_success(client: TestClient, test_user: dict[str, Any]) -> None:
 
     """
     # Arrange
-    login_data = {"username": test_user["username"], "password": test_user["password"]}
+    login_data = {"username": test_user_data["username"], "password": test_user_data["password"]}
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
     # Act
@@ -94,7 +98,7 @@ def test_login_success(client: TestClient, test_user: dict[str, Any]) -> None:
 
 
 def test_login_invalid_credentials(
-    client: TestClient, test_user: dict[str, Any]
+    client: TestClient, test_user_data: dict[str, Any]
 ) -> None:
     """
     Test login with invalid credentials.
@@ -105,7 +109,7 @@ def test_login_invalid_credentials(
 
     """
     # Arrange - Use incorrect password
-    login_data = {"username": test_user["username"], "password": "WrongPassword123!"}
+    login_data = {"username": test_user_data["username"], "password": "WrongPassword123!"}
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
     # Act
@@ -122,7 +126,7 @@ def test_login_invalid_credentials(
     assert "Incorrect username or password" in response_data["detail"]
 
 
-def test_protected_route(client: TestClient, test_user: dict[str, Any]) -> None:
+def test_protected_route(client: TestClient, test_user_data: dict[str, Any]) -> None:
     """
     Test accessing a protected route with a valid token.
 
@@ -132,7 +136,7 @@ def test_protected_route(client: TestClient, test_user: dict[str, Any]) -> None:
 
     """
     # Arrange - Login to get token
-    login_data = {"username": test_user["username"], "password": test_user["password"]}
+    login_data = {"username": test_user_data["username"], "password": test_user_data["password"]}
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
     # Act - Get access token
@@ -152,8 +156,8 @@ def test_protected_route(client: TestClient, test_user: dict[str, Any]) -> None:
     # Assert
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
-    assert data["username"] == test_user["username"]
-    assert data["email"] == test_user["email"]
+    assert data["username"] == test_user_data["username"]
+    assert data["email"] == test_user_data["email"]
     assert "hashed_password" not in data  # Sensitive data should be excluded
 
 

@@ -11,6 +11,7 @@ from app.core.database import get_db
 from app.models.user import User
 from app.models.video import Video
 from app.schemas.video import PresignedPost, VideoCreate, VideoInDB, VideoUploadComplete
+from app.schemas.video_status import VideoStatus
 
 router = APIRouter(prefix="/videos", tags=["videos"])
 
@@ -148,9 +149,7 @@ async def confirm_upload_complete(
 
     # Optional: Add logic to verify MinIO object existence/integrity here if needed
 
-    # For now, just mark as complete (or add a status field to Video model)
-    # Assuming a 'status' field will be added to the Video model later for processing
-    # video.status = "uploaded" # Example
+    video.status = VideoStatus.UPLOADED
     db.add(video)
     db.commit()
     db.refresh(video)

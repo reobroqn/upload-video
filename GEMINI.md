@@ -55,6 +55,7 @@ This document outlines the established coding styles, architectural patterns, an
     *   Variables within `<script>` tags: `camelCase`.
 *   **Styling Approach:** Primarily uses Tailwind CSS utility classes. Custom CSS is added in `app.css` if necessary, following a `@apply` pattern for Tailwind classes.
 *   **Tailwind Plugins:** `@tailwindcss/forms` is in use.
+*   **Linting/Formatting:** `eslint` and `prettier` are used for linting and formatting. After coding, run `npm run lint` and `npm run format`.
 
 ## 4. Git Conventions
 
@@ -70,4 +71,5 @@ This document outlines the established coding styles, architectural patterns, an
 *   **Adherence:** Always prioritize adherence to the existing style and structure.
 *   **Verification:** Before and after making changes, verify the project's build, linting, and testing commands.
 *   **Clarity:** Ensure all changes are clear, concise, and maintain the project's readability.
+*   **Testing:** For any new logic or significant changes, ensure corresponding unit or integration tests are added to maintain code quality and prevent regressions.
 *   **Comments:** Add comments sparingly, focusing on *why* a piece of code exists or is complex, rather than *what* it does.

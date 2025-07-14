@@ -1,4 +1,6 @@
-from sqlalchemy import Column, DateTime, Float, Integer, String
+from sqlalchemy import Column, DateTime, Enum, Float, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from app.schemas.video_status import VideoStatus
 from sqlalchemy.sql import func
 
 from app.core.database import Base
@@ -30,6 +32,12 @@ class Video(Base):
     )
     file_size = Column(Float, nullable=False, doc="Size of the video file in bytes")
     mime_type = Column(String, nullable=False, doc="MIME type of the video file")
+    status = Column(
+        Enum(VideoStatus),
+        default=VideoStatus.PENDING,
+        nullable=False,
+        doc="Status of the video processing",
+    )
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -41,6 +49,8 @@ class Video(Base):
         nullable=True,
         doc="Timestamp when the video record was last updated",
     )
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False, doc="The ID of the user who owns the video")
+    owner = relationship("User", back_populates="videos")
 
     def __repr__(self) -> str:
         """
