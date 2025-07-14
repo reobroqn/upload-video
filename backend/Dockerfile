@@ -1,24 +1,22 @@
-# Use a lightweight Python image as the base
-FROM python:3.12-slim-bookworm
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 
-# Set the working directory in the container
+# Install the project into `/app`
 WORKDIR /app
 
-# Install uv (a fast Python package installer and resolver)
-# See: https://github.com/astral-sh/uv
-RUN pip install uv
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project --no-dev
 
-# Copy pyproject.toml and uv.lock to leverage Docker cache for dependencies
-COPY pyproject.toml uv.lock ./
+ADD . /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
 
-# Install backend dependencies using uv
-RUN uv sync
 
-# Copy the rest of the application code
-COPY . .
+FROM python:3.12-slim-bookworm
 
-# Expose the port FastAPI runs on
-EXPOSE 8000
+COPY --from=builder --chown=app:app /app /app
 
-# Command to run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENV PATH="/app/.venv/bin:$PATH"
+
+CMD ["fastapi", "dev", "--host", "0.0.0.0", "/app/app/main.py"]

@@ -1,0 +1,28 @@
+# Except these specific files and directories
+!src/
+!pyproject.toml
+!uv.lock
+!alembic.ini
+!migrations/
+!docker-compose.yaml
+!Dockerfile
+
+# Ignore specific files and directories
+.git/
+.gitignore
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+.env
+.env.*
+logs/
+
+# Ignore development files
+*.md
+*.txt

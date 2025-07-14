@@ -90,9 +90,7 @@ def setup_routes(app: FastAPI) -> None:
         return get_swagger_ui_html(
             openapi_url=app.openapi_url,
             title=f"{settings.PROJECT_NAME} - Swagger UI",
-            oauth2_redirect_url=app.swagger_ui_oauth2_redirect_url,
-            swagger_js_url="/static/swagger-ui-bundle.js",
-            swagger_css_url="/static/swagger-ui.css",
+            oauth2_redirect_url=app.swagger_ui_oauth2_redirect_url
         )
 
     # OpenAPI JSON

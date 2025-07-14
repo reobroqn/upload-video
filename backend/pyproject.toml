@@ -78,8 +78,7 @@ authors = [
     { name = "Your Name", email = "your.email@example.com" },
 ]
 dependencies = [
-    "fastapi[standard]>=0.104.0",
-    "uvicorn>=0.23.2",
+    "fastapi[standard]>=0.112.2",
     "python-multipart>=0.0.6",
     "minio>=7.1.1", # MinIO client library
     "psycopg2-binary>=2.9.9",
