@@ -1,7 +1,10 @@
 <script>
+  import { onMount } from 'svelte';
   import Layout from './lib/components/Layout.svelte';
   import UserProfileForm from './lib/components/UserProfileForm.svelte';
   import VideoUploadForm from './lib/components/VideoUploadForm.svelte';
+  import VideoPlayer from './lib/components/VideoPlayer.svelte'; // Import VideoPlayer
+  import { videos } from './lib/stores/videos'; // Import the videos store
   import './app.css';
   
   let currentPage = 'home';
@@ -30,6 +33,24 @@
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
+    }
+  }
+
+  async function fetchVideos() {
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/videos/', {
+        headers: {
+          'Authorization': `Bearer YOUR_JWT_TOKEN` // Replace with actual token
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        videos.set(data);
+      } else {
+        console.error('Failed to fetch videos:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching videos:', error);
     }
   }
 
@@ -120,7 +141,7 @@
 
       alert('Video uploaded successfully!');
       showUploadForm = false; // Hide form after successful upload
-      // Optionally, refresh video list or navigate
+      fetchVideos(); // Refresh video list after successful upload
 
     } catch (error) {
       console.error('Error during video upload:', error);
@@ -128,8 +149,11 @@
     }
   }
 
-  // Fetch user profile on component mount
-  fetchUserProfile();
+  // Fetch user profile and videos on component mount
+  onMount(() => {
+    fetchUserProfile();
+    fetchVideos();
+  });
 </script>
 
 <Layout>
@@ -172,8 +196,30 @@
 
   <div class="bg-white shadow rounded-lg p-6 mt-8">
     <h2 class="text-lg font-medium text-gray-900 mb-4">Recent Videos</h2>
-    <div class="text-center py-8 text-gray-500">
-      <p>No videos yet. Upload your first video to get started!</p>
-    </div>
+    {#if $videos.length > 0}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {#each $videos as video (video.id)}
+          <div class="border rounded-lg overflow-hidden shadow-sm">
+            <VideoPlayer
+              options={{
+                controls: true,
+                responsive: true,
+                fluid: true,
+              }}
+              src={`http://localhost:9000/${video.file_key}`}
+              type={video.mime_type}
+            />
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">{video.title}</h3>
+              <p class="text-gray-600 text-sm">{video.description}</p>
+            </div>
+          </div>
+        {/each}
+      </div>
+    {:else}
+      <div class="text-center py-8 text-gray-500">
+        <p>No videos yet. Upload your first video to get started!</p>
+      </div>
+    {/if}
   </div>
 </Layout>
