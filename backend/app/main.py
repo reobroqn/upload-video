@@ -5,6 +5,7 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 
 from app.api import api_router
+from app.core.celery_app import celery_app
 from app.core.config import settings
 
 
@@ -90,7 +91,7 @@ def setup_routes(app: FastAPI) -> None:
         return get_swagger_ui_html(
             openapi_url=app.openapi_url,
             title=f"{settings.PROJECT_NAME} - Swagger UI",
-            oauth2_redirect_url=app.swagger_ui_oauth2_redirect_url
+            oauth2_redirect_url=app.swagger_ui_oauth2_redirect_url,
         )
 
     # OpenAPI JSON
@@ -107,3 +108,15 @@ def setup_routes(app: FastAPI) -> None:
 
 # Create the FastAPI application
 app = create_application()
+
+
+@app.on_event("startup")
+async def startup_event():
+    print("Starting up...")
+    # Example: Ping Celery worker to ensure it's running
+    # This is a basic check, more robust health checks might be needed
+    try:
+        celery_app.control.ping(timeout=1)
+        print("Celery worker is reachable.")
+    except Exception as e:
+        print(f"Celery worker not reachable: {e}")

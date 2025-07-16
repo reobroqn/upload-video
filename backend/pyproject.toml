@@ -88,6 +88,8 @@ dependencies = [
     "pydantic-settings>=2.0.0",
     "alembic>=1.16.2",
     "sqlalchemy>=2.0.41",
+    "celery[redis]>=5.3.6",
+    "redis>=5.0.1",
 ]
 requires-python = ">=3.12"
 

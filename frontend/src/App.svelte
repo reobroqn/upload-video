@@ -197,7 +197,7 @@
   <div class="bg-white shadow rounded-lg p-6 mt-8">
     <h2 class="text-lg font-medium text-gray-900 mb-4">Recent Videos</h2>
     {#if $videos.length > 0}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {#each $videos as video (video.id)}
           <div class="border rounded-lg overflow-hidden shadow-sm">
             <VideoPlayer
@@ -206,12 +206,34 @@
                 responsive: true,
                 fluid: true,
               }}
-              src={`http://localhost:9000/${video.file_key}`}
-              type={video.mime_type}
+              src={video.hls_url ? video.hls_url : `http://localhost:9000/${video.file_key}`}
+              type={video.hls_url ? 'application/x-mpegURL' : video.mime_type}
             />
             <div class="p-4">
               <h3 class="text-lg font-semibold">{video.title}</h3>
               <p class="text-gray-600 text-sm">{video.description}</p>
+              {#if video.tags.length > 0}
+                <div class="mt-2">
+                  {#each video.tags as tag}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2">
+                      {tag.name}
+                    </span>
+                  {/each}
+                </div>
+              {/if}
+              {#if video.categories.length > 0}
+                <div class="mt-2">
+                  {#each video.categories as category}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-2">
+                      {category.name}
+                    </span>
+                  {/each}
+                </div>
+              {/if}
+              <div class="mt-4">
+                <TagManager videoId={video.id} currentTags={video.tags} on:tagUpdated={fetchVideos} />
+                <CategoryManager videoId={video.id} currentCategories={video.categories} on:categoryUpdated={fetchVideos} />
+              </div>
             </div>
           </div>
         {/each}

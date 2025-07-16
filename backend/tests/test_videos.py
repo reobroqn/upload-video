@@ -1,5 +1,3 @@
-
-import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
@@ -7,6 +5,7 @@ from app.core.config import settings
 from app.models.user import User
 from app.models.video import Video
 from app.schemas.video_status import VideoStatus
+
 
 def create_test_video(db: Session, user: User) -> Video:
     """Helper function to create a video for testing."""
@@ -17,15 +16,19 @@ def create_test_video(db: Session, user: User) -> Video:
         file_size=1024 * 1024,  # 1MB
         mime_type="video/mp4",
         status=VideoStatus.PENDING,
-        owner_id=user.id
+        owner_id=user.id,
     )
     db.add(video)
     db.commit()
     db.refresh(video)
     return video
 
+
 def test_confirm_upload_complete(
-    client: TestClient, db: Session, test_user: tuple[User, str], user_token_headers: dict
+    client: TestClient,
+    db: Session,
+    test_user: tuple[User, str],
+    user_token_headers: dict,
 ):
     """
     Test the /videos/upload-complete endpoint.

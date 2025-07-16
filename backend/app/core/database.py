@@ -71,8 +71,14 @@ def init_db() -> None:
 
     """
     # Import all models here to ensure they are registered with SQLAlchemy
+    from app.models.category import Category  # noqa: F401
+    from app.models.tag import Tag  # noqa: F401
     from app.models.user import User  # noqa: F401
     from app.models.video import Video  # noqa: F401
+    from app.models.video_category_association import (
+        video_category_association,  # noqa: F401
+    )
+    from app.models.video_tag_association import video_tag_association  # noqa: F401
 
     # Create all tables
     Base.metadata.create_all(bind=engine)

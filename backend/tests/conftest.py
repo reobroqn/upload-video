@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.core.database import Base, get_db
 from app.main import app
 from app.models.user import User
-from app.models.video import Video
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./tests/test.db"
 
@@ -51,19 +50,25 @@ def test_user_data() -> dict[str, str]:
 
 
 @pytest.fixture(scope="session")
-def test_user(client: TestClient, db: Session, test_user_data: dict[str, str]) -> tuple[User, str]:
+def test_user(
+    client: TestClient, db: Session, test_user_data: dict[str, str]
+) -> tuple[User, str]:
     user = db.query(User).filter(User.email == test_user_data["email"]).first()
     if user is None:
         response = client.post("/api/v1/auth/register", json=test_user_data)
-        assert response.status_code == 201, f"Failed to create test user: {response.text}"
-        db.commit() # Explicitly commit the user to the database
+        assert response.status_code == 201, (
+            f"Failed to create test user: {response.text}"
+        )
+        db.commit()  # Explicitly commit the user to the database
         user = db.query(User).filter(User.email == test_user_data["email"]).first()
         assert user is not None
     return user, test_user_data["password"]
 
 
 @pytest.fixture
-def user_token_headers(client: TestClient, test_user: tuple[User, str]) -> dict[str, str]:
+def user_token_headers(
+    client: TestClient, test_user: tuple[User, str]
+) -> dict[str, str]:
     user, password = test_user
     login_data = {
         "username": user.username,

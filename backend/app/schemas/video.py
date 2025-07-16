@@ -2,6 +2,9 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
+from app.schemas.category import CategoryInDB
+from app.schemas.tag import TagInDB
+
 
 class VideoBase(BaseModel):
     """
@@ -36,6 +39,9 @@ class VideoInDB(VideoBase):
         None, description="Timestamp when the video record was last updated"
     )
     status: str = Field(..., description="Status of the video processing")
+    hls_url: str | None = Field(None, description="URL to the HLS master playlist")
+    tags: list[TagInDB] = []
+    categories: list[CategoryInDB] = []
 
     class Config:
         from_attributes = True

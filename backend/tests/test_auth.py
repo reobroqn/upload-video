@@ -79,7 +79,10 @@ def test_login_success(client: TestClient, test_user_data: dict[str, Any]) -> No
 
     """
     # Arrange
-    login_data = {"username": test_user_data["username"], "password": test_user_data["password"]}
+    login_data = {
+        "username": test_user_data["username"],
+        "password": test_user_data["password"],
+    }
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
     # Act
@@ -109,7 +112,10 @@ def test_login_invalid_credentials(
 
     """
     # Arrange - Use incorrect password
-    login_data = {"username": test_user_data["username"], "password": "WrongPassword123!"}
+    login_data = {
+        "username": test_user_data["username"],
+        "password": "WrongPassword123!",
+    }
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
     # Act
@@ -136,7 +142,10 @@ def test_protected_route(client: TestClient, test_user_data: dict[str, Any]) -> 
 
     """
     # Arrange - Login to get token
-    login_data = {"username": test_user_data["username"], "password": test_user_data["password"]}
+    login_data = {
+        "username": test_user_data["username"],
+        "password": test_user_data["password"],
+    }
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
     # Act - Get access token

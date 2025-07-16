@@ -1,9 +1,11 @@
-from sqlalchemy import Column, DateTime, Enum, Float, Integer, String, ForeignKey
+from sqlalchemy import Column, DateTime, Enum, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from app.schemas.video_status import VideoStatus
 from sqlalchemy.sql import func
 
 from app.core.database import Base
+from app.models.video_category_association import video_category_association
+from app.models.video_tag_association import video_tag_association
+from app.schemas.video_status import VideoStatus
 
 
 class Video(Base):
@@ -49,8 +51,18 @@ class Video(Base):
         nullable=True,
         doc="Timestamp when the video record was last updated",
     )
-    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False, doc="The ID of the user who owns the video")
+    owner_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False,
+        doc="The ID of the user who owns the video",
+    )
     owner = relationship("User", back_populates="videos")
+    hls_url = Column(String, nullable=True, doc="URL to the HLS master playlist")
+    tags = relationship("Tag", secondary=video_tag_association, backref="videos")
+    categories = relationship(
+        "Category", secondary=video_category_association, backref="videos"
+    )
 
     def __repr__(self) -> str:
         """

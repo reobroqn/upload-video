@@ -8,10 +8,13 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_current_active_user
 from app.core.config import settings
 from app.core.database import get_db
+from app.models.category import Category
+from app.models.tag import Tag
 from app.models.user import User
 from app.models.video import Video
 from app.schemas.video import PresignedPost, VideoCreate, VideoInDB, VideoUploadComplete
 from app.schemas.video_status import VideoStatus
+from app.tasks.video_processing import transcode_video
 
 router = APIRouter(prefix="/videos", tags=["videos"])
 
@@ -154,6 +157,9 @@ async def confirm_upload_complete(
     db.commit()
     db.refresh(video)
 
+    # Trigger video transcoding task
+    transcode_video.delay(video.id)
+
     return video
 
 
@@ -186,21 +192,125 @@ async def get_video_details(
     return video
 
 
-@router.get("/", response_model=list[VideoInDB])
-async def get_all_videos(
+@router.post("/{video_id}/tags/{tag_id}", response_model=VideoInDB)
+async def add_tag_to_video(
+    video_id: int,
+    tag_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> list[VideoInDB]:
+) -> VideoInDB:
     """
-    Get all videos.
-
-    Args:
-        db: Database session dependency.
-        current_user: The currently authenticated user.
-
-    Returns:
-        list[VideoInDB]: A list of video objects.
-
+    Add a tag to a video.
     """
-    videos = db.query(Video).all()
-    return videos
+    video = db.query(Video).filter(Video.id == video_id).first()
+    if not video:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Video not found"
+        )
+
+    tag = db.query(Tag).filter(Tag.id == tag_id).first()
+    if not tag:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Tag not found"
+        )
+
+    if tag not in video.tags:
+        video.tags.append(tag)
+        db.add(video)
+        db.commit()
+        db.refresh(video)
+
+    return video
+
+
+@router.delete("/{video_id}/tags/{tag_id}", response_model=VideoInDB)
+async def remove_tag_from_video(
+    video_id: int,
+    tag_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> VideoInDB:
+    """
+    Remove a tag from a video.
+    """
+    video = db.query(Video).filter(Video.id == video_id).first()
+    if not video:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Video not found"
+        )
+
+    tag = db.query(Tag).filter(Tag.id == tag_id).first()
+    if not tag:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Tag not found"
+        )
+
+    if tag in video.tags:
+        video.tags.remove(tag)
+        db.add(video)
+        db.commit()
+        db.refresh(video)
+
+    return video
+
+
+@router.post("/{video_id}/categories/{category_id}", response_model=VideoInDB)
+async def add_category_to_video(
+    video_id: int,
+    category_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> VideoInDB:
+    """
+    Add a category to a video.
+    """
+    video = db.query(Video).filter(Video.id == video_id).first()
+    if not video:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Video not found"
+        )
+
+    category = db.query(Category).filter(Category.id == category_id).first()
+    if not category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
+        )
+
+    if category not in video.categories:
+        video.categories.append(category)
+        db.add(video)
+        db.commit()
+        db.refresh(video)
+
+    return video
+
+
+@router.delete("/{video_id}/categories/{category_id}", response_model=VideoInDB)
+async def remove_category_from_video(
+    video_id: int,
+    category_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> VideoInDB:
+    """
+    Remove a category from a video.
+    """
+    video = db.query(Video).filter(Video.id == video_id).first()
+    if not video:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Video not found"
+        )
+
+    category = db.query(Category).filter(Category.id == category_id).first()
+    if not category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
+        )
+
+    if category in video.categories:
+        video.categories.remove(category)
+        db.add(video)
+        db.commit()
+        db.refresh(video)
+
+    return video
